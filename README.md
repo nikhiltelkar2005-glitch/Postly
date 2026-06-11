@@ -35,6 +35,32 @@ npm install
 npm run dev
 ```
 
+### Backend demo
+This repo includes a simple Express backend with JWT-based login/logout, user roles, and sample post APIs.
+
+#### Start the backend
+```bash
+npm install
+npm run start
+```
+
+#### Default test users
+- admin / admin123 (role: admin)
+- author1 / author123 (role: author)
+- editor1 / editor123 (role: editor)
+- reader1 / reader123 (role: reader)
+
+#### Auth endpoints
+- `POST /api/auth/login` — login with `username` and `password`
+- `POST /api/auth/logout` — logout using the bearer token
+- `GET /api/auth/me` — get the current authenticated user
+
+#### Post endpoints
+- `GET /api/posts` — list all posts
+- `GET /api/posts/:id` — get one post
+- `POST /api/posts` — create posts (admin/author/editor)
+- `PUT /api/posts/:id` — update posts (owner/editor/admin)
+
 ### Build for production
 ```bash
 npm run build
