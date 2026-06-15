@@ -91,3 +91,7 @@ This project is licensed under the [MIT License](https://choosealicense.com/lice
 
 ## Contact
 If you want to contribute or need help, connect through the repository issues page.
+
+
+Name: Nikhil v Telkar
+Newton school of technology
