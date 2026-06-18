@@ -4,6 +4,15 @@ const jwt = require('jsonwebtoken');
 const app = express();
 app.use(express.json());
 
+// Allow Vite dev server to call the API
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  if (req.method === 'OPTIONS') return res.sendStatus(204);
+  next();
+});
+
 const JWT_SECRET = process.env.JWT_SECRET || 'PostlySecretKey';
 const TOKEN_EXPIRY = '1h';
 const tokenBlacklist = new Set();
