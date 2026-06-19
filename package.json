@@ -1,9 +1,14 @@
 {
   "name": "postly",
   "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "npm run dev --prefix client",
+    "dev": "concurrently \"npm run dev --prefix client\" \"node server.mjs\"",
     "build": "npm run build --prefix client",
-    "preview": "npm run preview --prefix client"
+    "preview": "npm run preview --prefix client",
+    "autocommit": "node auto-commit.mjs"
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.3"
   }
 }

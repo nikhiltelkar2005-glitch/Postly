@@ -1,10 +1,16 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import apiPlugin from './api-plugin.js'
 
 export default defineConfig({
-  plugins: [react(), apiPlugin()],
+  plugins: [react()],
   server: {
     port: 3000,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:5678',
+        rewrite: (path) => path.replace(/^\/api/, '/webhook/postly'),
+        changeOrigin: true,
+      }
+    }
   }
 })

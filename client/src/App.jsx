@@ -5,6 +5,7 @@ import Dashboard from './pages/Dashboard';
 import PostsPage from './pages/PostsPage';
 import NewPostPage from './pages/NewPostPage';
 import UsersPage from './pages/UsersPage';
+import ProfilePage from './pages/ProfilePage';
 import Sidebar from './components/Sidebar';
 
 function AppShell() {
@@ -13,8 +14,9 @@ function AppShell() {
 
   if (loading) {
     return (
-      <div className="loading-page" style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div className="loading-page" style={{ height: '100vh' }}>
         <div className="spinner" style={{ width: 48, height: 48, borderWidth: 4 }} />
+        <span>Loading Postly…</span>
       </div>
     );
   }
@@ -27,17 +29,16 @@ function AppShell() {
     return true;
   };
 
-  const navigate = (p) => {
-    if (canAccess(p)) setPage(p);
-  };
+  const navigate = (p) => { if (canAccess(p)) setPage(p); };
 
   const renderPage = () => {
     switch (page) {
       case 'dashboard': return <Dashboard onNavigate={navigate} />;
-      case 'posts': return <PostsPage />;
-      case 'new-post': return <NewPostPage onNavigate={navigate} />;
-      case 'users': return canAccess('users') ? <UsersPage /> : <Dashboard onNavigate={navigate} />;
-      default: return <Dashboard onNavigate={navigate} />;
+      case 'posts':     return <PostsPage />;
+      case 'new-post':  return <NewPostPage onNavigate={navigate} />;
+      case 'profile':   return <ProfilePage />;
+      case 'users':     return canAccess('users') ? <UsersPage /> : <Dashboard onNavigate={navigate} />;
+      default:          return <Dashboard onNavigate={navigate} />;
     }
   };
 

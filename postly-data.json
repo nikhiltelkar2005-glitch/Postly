@@ -1,0 +1,17 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Admin User",
+      "email": "admin@adypu.edu.in",
+      "password": "8d129056270288d6029467d2f591d81b807ab897d1911c925f506f46ace71b61",
+      "role": "admin",
+      "college": "adypu.edu.in",
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    }
+  ],
+  "posts": [],
+  "tokenBlacklist": [
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImVtYWlsIjoiYWRtaW5AYWR5cHUuZWR1LmluIiwicm9sZSI6ImFkbWluIiwiY29sbGVnZSI6ImFkeXB1LmVkdS5pbiIsImlhdCI6MTc4MTg2MDQxMSwiZXhwIjoxNzgxOTQ2ODExfQ.EzCTEkdFl2BPYn111cyGDuso0oRs9pfSxPNEl37GtXY"
+  ]
+}

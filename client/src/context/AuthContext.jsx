@@ -19,8 +19,15 @@ export function AuthProvider({ children }) {
     }
   }, []);
 
-  const login = async (username, password) => {
-    const data = await api.login(username, password);
+  const register = async (name, email, password) => {
+    const data = await api.register(name, email, password);
+    localStorage.setItem('postly_token', data.accessToken);
+    setUser(data.user);
+    return data.user;
+  };
+
+  const login = async (email, password) => {
+    const data = await api.login(email, password);
     localStorage.setItem('postly_token', data.accessToken);
     setUser(data.user);
     return data.user;
@@ -33,7 +40,7 @@ export function AuthProvider({ children }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading }}>
+    <AuthContext.Provider value={{ user, login, logout, register, loading }}>
       {children}
     </AuthContext.Provider>
   );

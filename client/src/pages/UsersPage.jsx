@@ -40,7 +40,7 @@ export default function UsersPage() {
                 <tr>
                   <th>#</th>
                   <th>Name</th>
-                  <th>Username</th>
+                  <th>Email</th>
                   <th>Role</th>
                 </tr>
               </thead>
@@ -56,7 +56,7 @@ export default function UsersPage() {
                         <span style={{ fontWeight: 600, color: 'var(--text)' }}>{u.name}</span>
                       </div>
                     </td>
-                    <td style={{ fontFamily: 'monospace', fontSize: 13, color: 'var(--text-secondary)' }}>@{u.username}</td>
+                    <td style={{ fontFamily: 'monospace', fontSize: 13, color: 'var(--text-secondary)' }}>{u.email}</td>
                     <td>
                       <span className={`badge badge-${u.role}`}>{u.role}</span>
                     </td>
