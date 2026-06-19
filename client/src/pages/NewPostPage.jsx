@@ -195,10 +195,10 @@ export default function NewPostPage({ onNavigate }) {
             <div className="card tips-card" style={{ marginTop: 16 }}>
               <h4>Posting as</h4>
               <div className="posting-as">
-                <div className="user-avatar">{user?.name?.split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase()}</div>
+                <div className="user-avatar">A</div>
                 <div>
-                  <div className="user-name">{user?.name}</div>
-                  <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>{user?.email || user?.username}</div>
+                  <div className="user-name">{user?.anonymousId || 'Anonymous'}</div>
+                  <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>Anonymous</div>
                 </div>
               </div>
             </div>

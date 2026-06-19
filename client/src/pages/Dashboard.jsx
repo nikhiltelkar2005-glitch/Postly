@@ -24,9 +24,6 @@ export default function Dashboard({ onNavigate }) {
     })
     .slice(0, 3);
 
-  const greetings = ['What is the vibe today?', 'Ready to post something?', 'Share something with your batch.'];
-  const greeting  = greetings[Math.floor(Math.random() * greetings.length)];
-
   if (loading) return (
     <div className="loading-page">
       <div className="spinner" style={{ width: 36, height: 36, borderWidth: 3 }} />
@@ -38,8 +35,8 @@ export default function Dashboard({ onNavigate }) {
     <>
       <div className="topbar">
         <div className="topbar-left">
-          <h2>Hey, {user?.name?.split(' ')[0]}!</h2>
-          <p>{greeting}</p>
+          <h2>Dashboard</h2>
+          <p>Welcome, {user?.anonymousId || 'Anonymous'}.</p>
         </div>
         <div className="topbar-right">
           {canWrite && (
@@ -95,7 +92,7 @@ export default function Dashboard({ onNavigate }) {
                     <span className="trending-rank">{['#1','#2','#3'][i]}</span>
                     <div className="trending-content">
                       <div className="trending-title">{post.title}</div>
-                      <div className="trending-meta">by {post.authorName || `User #${post.authorId}`} &middot; {totalReactions} reactions</div>
+                      <div className="trending-meta">by {post.authorName || 'Unknown'} &middot; {totalReactions} reactions</div>
                     </div>
                     {post.imageBase64 && (
                       <img src={post.imageBase64} className="trending-thumb" alt="" />

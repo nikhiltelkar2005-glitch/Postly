@@ -13,9 +13,6 @@ export default function Sidebar({ activePage, onNavigate }) {
 
   const visible  = NAV_ITEMS.filter(item => !item.roles || item.roles.includes(user?.role));
   const sections = [...new Set(visible.map(i => i.section))];
-  const initials = user?.name
-    ? user.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
-    : '?';
 
   return (
     <aside className="sidebar">
@@ -49,9 +46,9 @@ export default function Sidebar({ activePage, onNavigate }) {
 
       <div className="sidebar-footer">
         <div className="user-card">
-          <div className="user-avatar">{initials}</div>
+          <div className="user-avatar">A</div>
           <div className="user-info">
-            <div className="user-name">{user?.name}</div>
+            <div className="user-name">{user?.anonymousId || 'Anonymous'}</div>
             <div className="user-role">
               <span className={`badge badge-${user?.role}`}>{user?.role}</span>
             </div>

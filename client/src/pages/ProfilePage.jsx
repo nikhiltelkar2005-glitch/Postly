@@ -25,7 +25,6 @@ export default function ProfilePage() {
       .finally(() => setLoading(false));
   }, [user]);
 
-  const initials = user?.name?.split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase() || '?';
   const totalReactions = posts.reduce((sum, p) => sum + Object.values(p.reactions || {}).reduce((s,v)=>s+v,0), 0);
 
   return (
@@ -33,16 +32,15 @@ export default function ProfilePage() {
       <div className="topbar">
         <div className="topbar-left">
           <h2>My Profile</h2>
-          <p>Your personal dashboard.</p>
+          <p>Your anonymous identity.</p>
         </div>
       </div>
 
       <div className="page-body">
         <div className="profile-hero">
-          <div className="profile-avatar-lg">{initials}</div>
+          <div className="profile-avatar-lg">A</div>
           <div className="profile-info">
-            <h2 className="profile-name">{user?.name}</h2>
-            <p className="profile-email">{user?.email || user?.username}</p>
+            <h2 className="profile-name">{user?.anonymousId || 'Anonymous'}</h2>
             <span className={`badge badge-${user?.role}`}>{user?.role}</span>
           </div>
           <div className="profile-stats-row">
