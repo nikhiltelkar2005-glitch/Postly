@@ -9,7 +9,6 @@ const __dir      = dirname(fileURLToPath(import.meta.url));
 const PORT       = 5678;
 const DATA_FILE  = join(__dir, 'postly-data.json');
 const JWT_SECRET = 'PostlyADYPU2024SecretKey';
-const COLLEGE    = 'adypu.edu.in';
 const CORS_ORIGIN = 'http://localhost:3000';
 
 const OTP_STORE = new Map();
@@ -121,14 +120,13 @@ async function handle(req, res) {
   // ── POST /webhook/postly/auth/send-otp ──
   if (url === '/webhook/postly/auth/send-otp' && method === 'POST') {
     const { email } = body;
-    if (!email) return json(res, 400, { message: 'Email is required.' });
-    if (!email.toLowerCase().endsWith(`@${COLLEGE}`))
-      return json(res, 403, { message: `Only @${COLLEGE} emails are allowed.` });
+    if (!email || !email.includes('@')) return json(res, 400, { message: 'Valid email is required.' });
 
     const otp = generateOTP();
     const key = email.toLowerCase().trim();
 
-    OTP_STORE.set(key, { otp, expiresAt: Date.now() + OTP_EXPIRY_MS });
+    const domain = key.split('@')[1];
+    OTP_STORE.set(key, { otp, expiresAt: Date.now() + OTP_EXPIRY_MS, domain });
 
     console.log(`\n[OTP] ${key} -> ${otp} (expires in 5 min)`);
 
@@ -167,6 +165,8 @@ async function handle(req, res) {
     }
     if (stored.otp !== otp) return json(res, 400, { message: 'Wrong OTP. Try again.' });
 
+    const storedData = OTP_STORE.get(key);
+    const college = storedData?.domain || key.split('@')[1];
     OTP_STORE.delete(key);
 
     const data = readData();
@@ -179,7 +179,7 @@ async function handle(req, res) {
         email: key,
         anonymousId,
         role: 'author',
-        college: COLLEGE,
+        college,
         createdAt: new Date().toISOString(),
       };
       data.users.push(user);
@@ -377,7 +377,7 @@ server.listen(PORT, () => {
   console.log('');
   console.log('  Postly Backend Server');
   console.log(`  Running on http://localhost:${PORT}`);
-  console.log(`  College: @${COLLEGE}`);
+  console.log('  Multi-college: any email domain accepted');
   console.log(`  Data: postly-data.json`);
   if (transporter) {
     console.log('  Email: configured (Gmail)');

@@ -1,7 +1,5 @@
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { COLLEGE } from '../api';
-
 export default function LoginPage() {
   const { sendOtp, verifyOtp } = useAuth();
   const [step, setStep] = useState('email');
@@ -13,8 +11,7 @@ export default function LoginPage() {
 
   const handleSendOtp = async (e) => {
     e.preventDefault();
-    if (!email) return setError('Enter your college email.');
-    if (!email.endsWith(`@${COLLEGE}`)) return setError(`Only @${COLLEGE} emails allowed.`);
+    if (!email || !email.includes('@')) return setError('Enter a valid email.');
     setError(''); setLoading(true);
     try {
       await sendOtp(email);
@@ -53,10 +50,10 @@ export default function LoginPage() {
         <div className="login-brand-content">
           <h1>Postly</h1>
           <p className="login-brand-tagline">Your college's anonymous network.</p>
-          <p className="login-brand-sub">No names. No profiles. Just real talk.</p>
-          <div className="login-brand-domain">
-            Exclusive to <strong>@{COLLEGE}</strong>
-          </div>
+              <p className="login-brand-sub">No names. No profiles. Just real talk.</p>
+              <div className="login-brand-domain">
+                Any college email works
+              </div>
         </div>
       </div>
 
@@ -88,7 +85,7 @@ export default function LoginPage() {
                   id="login-email"
                   className="form-input"
                   type="email"
-                  placeholder={`your.id@${COLLEGE}`}
+                  placeholder="your.email@college.edu"
                   value={email}
                   onChange={e => setEmail(e.target.value)}
                   autoComplete="email"
