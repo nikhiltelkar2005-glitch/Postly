@@ -1,4 +1,3 @@
-// API base — Vite proxy forwards /api → http://localhost:5678/webhook/postly
 const BASE = '/api';
 
 const COLLEGE_DOMAIN = 'adypu.edu.in';
@@ -26,13 +25,11 @@ async function request(method, path, body) {
 export const COLLEGE = COLLEGE_DOMAIN;
 
 export const api = {
-  // Auth
-  register:   (name, email, password) => request('POST', '/auth/register', { name, email, password }),
-  login:      (email, password)       => request('POST', '/auth/login', { email, password }),
+  sendOtp:    (email)                 => request('POST', '/auth/send-otp', { email }),
+  verifyOtp:  (email, otp)            => request('POST', '/auth/verify-otp', { email, otp }),
   logout:     ()                      => request('POST', '/auth/logout'),
   me:         ()                      => request('GET',  '/auth/me'),
 
-  // Posts
   getPosts:   ()                      => request('GET',  '/posts'),
   getPost:    (id)                    => request('GET',  `/posts/${id}`),
   createPost: (data)                  => request('POST', '/posts', data),
@@ -40,6 +37,5 @@ export const api = {
   deletePost: (id)                    => request('DELETE', `/posts/${id}`),
   reactPost:  (id, emoji)             => request('POST', `/posts/${id}/react`, { emoji }),
 
-  // Users (admin)
   getUsers:   ()                      => request('GET',  '/users'),
 };
