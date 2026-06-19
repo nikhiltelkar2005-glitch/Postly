@@ -3,50 +3,57 @@ import { useAuth } from '../context/AuthContext';
 import { COLLEGE } from '../api';
 
 export default function LoginPage() {
-  const { login, register } = useAuth();
-  const [tab, setTab] = useState('login');
-
-  const [lEmail, setLEmail]     = useState('');
-  const [lPassword, setLPassword] = useState('');
-
-  const [sName, setSName]       = useState('');
-  const [sEmail, setSEmail]     = useState('');
-  const [sPassword, setSPassword] = useState('');
-  const [sConfirm, setSConfirm] = useState('');
-
-  const [error, setError]   = useState('');
+  const { sendOtp, verifyOtp } = useAuth();
+  const [step, setStep] = useState('email');
+  const [email, setEmail] = useState('');
+  const [otp, setOtp] = useState('');
+  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
 
-  const handleLogin = async (e) => {
+  const handleSendOtp = async (e) => {
     e.preventDefault();
-    if (!lEmail || !lPassword) return setError('Fill in both fields.');
-    if (!lEmail.endsWith(`@${COLLEGE}`)) return setError(`Only @${COLLEGE} emails allowed.`);
+    if (!email) return setError('Enter your college email.');
+    if (!email.endsWith(`@${COLLEGE}`)) return setError(`Only @${COLLEGE} emails allowed.`);
     setError(''); setLoading(true);
-    try { await login(lEmail, lPassword); }
-    catch (err) { setError(err.message); }
-    finally { setLoading(false); }
+    try {
+      await sendOtp(email);
+      setMessage('OTP sent to your email.');
+      setStep('otp');
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleSignup = async (e) => {
+  const handleVerifyOtp = async (e) => {
     e.preventDefault();
-    if (!sName.trim()) return setError('Your name is required.');
-    if (!sEmail.endsWith(`@${COLLEGE}`)) return setError(`Only @${COLLEGE} emails allowed.`);
-    if (sPassword.length < 6) return setError('Password must be at least 6 characters.');
-    if (sPassword !== sConfirm) return setError('Passwords do not match.');
+    if (!otp || otp.length !== 6) return setError('Enter the 6-digit OTP.');
     setError(''); setLoading(true);
-    try { await register(sName.trim(), sEmail, sPassword); }
-    catch (err) { setError(err.message); }
-    finally { setLoading(false); }
+    try {
+      await verifyOtp(email, otp);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleBack = () => {
+    setStep('email');
+    setError('');
+    setMessage('');
+    setOtp('');
   };
 
   return (
     <div className="login-page">
       <div className="login-brand">
-        <div className="login-brand-glow" />
         <div className="login-brand-content">
           <h1>Postly</h1>
-          <p className="login-brand-tagline">Your college's private network.</p>
-          <p className="login-brand-sub">Connect with your batchmates. Share what matters.</p>
+          <p className="login-brand-tagline">Your college's anonymous network.</p>
+          <p className="login-brand-sub">No names. No profiles. Just real talk.</p>
           <div className="login-brand-domain">
             Exclusive to <strong>@{COLLEGE}</strong>
           </div>
@@ -57,31 +64,24 @@ export default function LoginPage() {
         <div className="login-card">
           <div className="login-card-header">
             <div className="login-logo-sm">P</div>
-            <h2>{tab === 'login' ? 'Welcome back' : 'Create your account'}</h2>
-            <p>{tab === 'login' ? 'Sign in with your college email' : 'Sign up with your college email'}</p>
+            {step === 'email' ? (
+              <>
+                <h2>Enter the forum</h2>
+                <p>Sign in with your college email</p>
+              </>
+            ) : (
+              <>
+                <h2>Check your email</h2>
+                <p>A 6-digit code was sent to {email}</p>
+              </>
+            )}
           </div>
 
-          <div className="auth-tabs">
-            <button
-              id="tab-login"
-              className={`auth-tab ${tab === 'login' ? 'active' : ''}`}
-              onClick={() => { setTab('login'); setError(''); }}
-            >Login</button>
-            <button
-              id="tab-signup"
-              className={`auth-tab ${tab === 'signup' ? 'active' : ''}`}
-              onClick={() => { setTab('signup'); setError(''); }}
-            >Sign Up</button>
-          </div>
+          {error && <div className="alert alert-error">{error}</div>}
+          {message && <div className="alert alert-success">{message}</div>}
 
-          {error && (
-            <div className="alert alert-error">
-              {error}
-            </div>
-          )}
-
-          {tab === 'login' ? (
-            <form id="login-form" onSubmit={handleLogin}>
+          {step === 'email' ? (
+            <form id="otp-email-form" onSubmit={handleSendOtp}>
               <div className="form-group">
                 <label className="form-label" htmlFor="login-email">College Email</label>
                 <input
@@ -89,88 +89,44 @@ export default function LoginPage() {
                   className="form-input"
                   type="email"
                   placeholder={`your.id@${COLLEGE}`}
-                  value={lEmail}
-                  onChange={e => setLEmail(e.target.value)}
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
                   autoComplete="email"
                   autoFocus
                 />
               </div>
-              <div className="form-group">
-                <label className="form-label" htmlFor="login-password">Password</label>
-                <input
-                  id="login-password"
-                  className="form-input"
-                  type="password"
-                  placeholder="Enter your password"
-                  value={lPassword}
-                  onChange={e => setLPassword(e.target.value)}
-                  autoComplete="current-password"
-                />
-              </div>
-              <button id="login-btn" type="submit" className="btn btn-primary btn-full" disabled={loading}>
-                {loading ? <span className="spinner" /> : null} {loading ? 'Logging in…' : 'Login'}
+              <button id="send-otp-btn" type="submit" className="btn btn-primary btn-full" disabled={loading}>
+                {loading ? <span className="spinner" /> : null} {loading ? 'Sending…' : 'Send OTP'}
               </button>
             </form>
           ) : (
-            <form id="signup-form" onSubmit={handleSignup}>
+            <form id="otp-verify-form" onSubmit={handleVerifyOtp}>
               <div className="form-group">
-                <label className="form-label" htmlFor="signup-name">Your Name</label>
+                <label className="form-label" htmlFor="otp-input">6-Digit Code</label>
                 <input
-                  id="signup-name"
+                  id="otp-input"
                   className="form-input"
                   type="text"
-                  placeholder="Your full name"
-                  value={sName}
-                  onChange={e => setSName(e.target.value)}
+                  inputMode="numeric"
+                  maxLength={6}
+                  placeholder="Enter the code"
+                  value={otp}
+                  onChange={e => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
                   autoFocus
+                  style={{ fontSize: 24, letterSpacing: 8, textAlign: 'center', fontWeight: 700 }}
                 />
               </div>
-              <div className="form-group">
-                <label className="form-label" htmlFor="signup-email">College Email</label>
-                <input
-                  id="signup-email"
-                  className="form-input"
-                  type="email"
-                  placeholder={`your.id@${COLLEGE}`}
-                  value={sEmail}
-                  onChange={e => setSEmail(e.target.value)}
-                  autoComplete="email"
-                />
-              </div>
-              <div className="form-group">
-                <label className="form-label" htmlFor="signup-password">Password</label>
-                <input
-                  id="signup-password"
-                  className="form-input"
-                  type="password"
-                  placeholder="Min 6 characters"
-                  value={sPassword}
-                  onChange={e => setSPassword(e.target.value)}
-                />
-              </div>
-              <div className="form-group">
-                <label className="form-label" htmlFor="signup-confirm">Confirm Password</label>
-                <input
-                  id="signup-confirm"
-                  className="form-input"
-                  type="password"
-                  placeholder="Repeat password"
-                  value={sConfirm}
-                  onChange={e => setSConfirm(e.target.value)}
-                />
-              </div>
-              <button id="signup-btn" type="submit" className="btn btn-primary btn-full" disabled={loading}>
-                {loading ? <span className="spinner" /> : null} {loading ? 'Creating account…' : 'Create Account'}
+              <button id="verify-otp-btn" type="submit" className="btn btn-primary btn-full" disabled={loading}>
+                {loading ? <span className="spinner" /> : null} {loading ? 'Verifying…' : 'Verify & Sign In'}
               </button>
+              <button
+                type="button"
+                className="btn btn-secondary btn-full"
+                style={{ marginTop: 8 }}
+                onClick={handleBack}
+              >Use a different email</button>
             </form>
           )}
-
-          <p className="login-footer">
-            {tab === 'login'
-              ? <>New here? <button className="link-btn" onClick={() => { setTab('signup'); setError(''); }}>Sign up</button></>
-              : <>Already have an account? <button className="link-btn" onClick={() => { setTab('login'); setError(''); }}>Login</button></>
-            }
-          </p>
         </div>
       </div>
     </div>
