@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import { api } from '../api';
 
 export default function UsersPage() {
-  const [users,   setUsers]   = useState([]);
+  const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error,   setError]   = useState('');
+  const [error, setError] = useState('');
 
   useEffect(() => {
     api.getUsers()
@@ -13,24 +13,20 @@ export default function UsersPage() {
       .finally(() => setLoading(false));
   }, []);
 
-  const roleColors = {
-    admin:  'badge-admin',
-    author: 'badge-author',
-    editor: 'badge-editor',
-    reader: 'badge-reader',
-  };
-
   return (
     <>
-      <div className="page-header">
-        <div className="page-header-inner">
-          <h2 className="page-title">User Management</h2>
-          <p className="page-subtitle">{users.length} registered users</p>
+      <div className="topbar">
+        <div className="topbar-left">
+          <h2>Users</h2>
+          <p>{users.length} registered user{users.length !== 1 ? 's' : ''}</p>
         </div>
       </div>
 
       <div className="page-body">
-        {error && <div className="alert alert-error">{error}</div>}
+        {error && <div className="alert alert-error">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+          {error}
+        </div>}
 
         {loading ? (
           <div className="loading-page">
@@ -51,18 +47,18 @@ export default function UsersPage() {
               <tbody>
                 {users.map(u => (
                   <tr key={u.id} id={`user-row-${u.id}`}>
-                    <td style={{ color: 'var(--color-text-dim)', fontWeight: 600 }}>{u.id}</td>
+                    <td style={{ color: 'var(--text-muted)', fontWeight: 600, width: 60 }}>{u.id}</td>
                     <td>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                        <div className="user-avatar" style={{ width: 30, height: 30, fontSize: 11 }}>
+                        <div className="user-avatar" style={{ width: 32, height: 32, fontSize: 11 }}>
                           {u.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()}
                         </div>
-                        <span style={{ fontWeight: 600, color: 'var(--color-text)' }}>{u.name}</span>
+                        <span style={{ fontWeight: 600, color: 'var(--text)' }}>{u.name}</span>
                       </div>
                     </td>
-                    <td style={{ fontFamily: 'monospace', fontSize: 13 }}>@{u.username}</td>
+                    <td style={{ fontFamily: 'monospace', fontSize: 13, color: 'var(--text-secondary)' }}>@{u.username}</td>
                     <td>
-                      <span className={`badge ${roleColors[u.role] || ''}`}>{u.role}</span>
+                      <span className={`badge badge-${u.role}`}>{u.role}</span>
                     </td>
                   </tr>
                 ))}
