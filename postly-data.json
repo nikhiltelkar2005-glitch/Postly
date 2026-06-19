@@ -1,5 +1,14 @@
 {
-  "users": [],
+  "users": [
+    {
+      "id": 1781861165694,
+      "email": "test@adypu.edu.in",
+      "anonymousId": "Student_QM3SNQ",
+      "role": "author",
+      "college": "adypu.edu.in",
+      "createdAt": "2026-06-19T09:26:05.694Z"
+    }
+  ],
   "posts": [],
   "tokenBlacklist": []
 }
