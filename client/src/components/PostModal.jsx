@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react';
 import { api } from '../api';
+import RichEditor from './RichEditor';
 
 function fileToBase64(file) {
   return new Promise((resolve, reject) => {
@@ -93,8 +94,8 @@ export default function PostModal({ post, onClose, onSaved }) {
           </div>
 
           <div className="form-group">
-            <label className="form-label" htmlFor="post-content">Content</label>
-            <textarea id="post-content" className="form-textarea" placeholder="Write something..." value={content} onChange={e => setContent(e.target.value)} style={{ minHeight: 140 }} />
+            <label className="form-label">Content</label>
+            <RichEditor content={content} onChange={setContent} />
           </div>
 
           <div className="form-group">

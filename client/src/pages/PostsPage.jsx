@@ -170,7 +170,7 @@ function PostCard({ post, user, onEdit, onDeleted, onReacted }) {
 
       <div className="post-card-body">
         <h4 className="post-card-title">{post.title}</h4>
-        {post.content && <p className="post-card-excerpt">{post.content}</p>}
+        {post.content && <div className="post-card-excerpt" dangerouslySetInnerHTML={{ __html: post.content }} />}
       </div>
 
       <div className="post-reactions">

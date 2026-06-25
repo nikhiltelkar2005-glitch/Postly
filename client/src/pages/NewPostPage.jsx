@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
 import { api } from '../api';
 import { useAuth } from '../context/AuthContext';
+import RichEditor from '../components/RichEditor';
 
 const MAX_IMAGE_MB = 2;
 
@@ -138,15 +139,8 @@ export default function NewPostPage({ onNavigate }) {
               </div>
 
               <div className="form-group">
-                <label className="form-label" htmlFor="new-post-content">Content</label>
-                <textarea
-                  id="new-post-content"
-                  className="form-textarea"
-                  placeholder="Write something..."
-                  value={content}
-                  onChange={e => setContent(e.target.value)}
-                  style={{ minHeight: 180 }}
-                />
+                <label className="form-label">Content</label>
+                <RichEditor content={content} onChange={setContent} />
               </div>
 
               <div className="form-group">

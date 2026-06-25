@@ -23,6 +23,12 @@ if (EMAIL_USER && EMAIL_PASS) {
     service: 'gmail',
     auth: { user: EMAIL_USER, pass: EMAIL_PASS },
   });
+  transporter.verify().then(() => {
+    console.log('  Email: Gmail SMTP connected successfully');
+  }).catch(err => {
+    console.error(`  Email: Gmail SMTP connection FAILED: ${err.message}`);
+    transporter = null;
+  });
 }
 
 function generateAnonymousId() {
@@ -130,24 +136,31 @@ async function handle(req, res) {
 
     console.log(`\n[OTP] ${key} -> ${otp} (expires in 5 min)`);
 
+    let emailSent = false;
     if (transporter) {
       try {
-        await transporter.sendMail({
+        const info = await transporter.sendMail({
           from: `"Postly" <${EMAIL_USER}>`,
           to: key,
           subject: 'Your Postly OTP Code',
           text: `Your OTP is: ${otp}\n\nThis code expires in 5 minutes.\n\n- Postly Team`,
           html: `<p>Your OTP is: <strong>${otp}</strong></p><p>This code expires in 5 minutes.</p>`,
         });
-        console.log(`[OTP] Email sent to ${key}`);
+        console.log(`[OTP] Email sent to ${key} (id: ${info.messageId})`);
+        emailSent = true;
       } catch (err) {
-        console.error(`[OTP] Failed to send email: ${err.message}`);
+        console.error(`[OTP] Failed to send email to ${key}:`);
+        console.error(`[OTP]   Error: ${err.message}`);
+        if (err.code) console.error(`[OTP]   Code: ${err.code}`);
+        if (err.response) console.error(`[OTP]   Response: ${err.response}`);
       }
-    } else {
-      console.log(`[OTP] No email configured. OTP for ${key}: ${otp}`);
     }
 
-    return json(res, 200, { message: 'OTP sent to your email.' });
+    if (!emailSent) {
+      console.log(`[OTP] Use the code above to login.`);
+    }
+
+    return json(res, 200, { message: emailSent ? 'OTP sent to your email.' : 'OTP printed in terminal (email failed).' });
   }
 
   // ── POST /webhook/postly/auth/verify-otp ──
@@ -379,8 +392,8 @@ server.listen(PORT, () => {
   console.log(`  Running on http://localhost:${PORT}`);
   console.log('  Multi-college: any email domain accepted');
   console.log(`  Data: postly-data.json`);
-  if (transporter) {
-    console.log('  Email: configured (Gmail)');
+  if (EMAIL_USER && EMAIL_PASS) {
+    console.log('  Email: Gmail configured — verifying connection...');
   } else {
     console.log('  Email: NOT configured — OTPs will be logged to console');
     console.log('  Set EMAIL_USER and EMAIL_PASS env vars to enable email.');

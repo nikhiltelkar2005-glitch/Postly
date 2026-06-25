@@ -751,3 +751,189 @@ tbody tr:hover td { background: var(--bg-hover); }
   .feed-grid  { grid-template-columns: 1fr; }
   .profile-stats-row { margin-left: 0; }
 }
+
+/* ===== RICH TEXT EDITOR (TipTap) ===== */
+.rich-editor {
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-card);
+  overflow: hidden;
+  transition: var(--transition);
+}
+.rich-editor:focus-within {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-bg);
+}
+
+.rich-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--border-light);
+  background: var(--bg-surface);
+  flex-wrap: wrap;
+}
+
+.rich-tool-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 13px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.rich-tool-btn:hover { background: var(--bg-hover); color: var(--text); }
+.rich-tool-btn.active { background: var(--primary-bg); color: var(--primary); }
+.rich-tool-btn strong { font-weight: 700; }
+.rich-tool-btn em { font-style: italic; }
+.rich-tool-btn code {
+  font-size: 11px;
+  background: var(--bg-hover);
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+
+.rich-divider {
+  width: 1px;
+  height: 22px;
+  background: var(--border);
+  margin: 0 4px;
+  flex-shrink: 0;
+}
+
+.rich-editor-content {
+  padding: 16px 18px;
+  min-height: 180px;
+  outline: none;
+  line-height: 1.7;
+  font-size: 14px;
+  color: var(--text);
+  cursor: text;
+}
+
+/* Placeholder */
+.rich-editor-content p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  color: var(--text-muted);
+  pointer-events: none;
+  float: left;
+  height: 0;
+}
+
+/* ProseMirror content styles */
+.rich-editor-content h2 {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 20px 0 8px;
+  line-height: 1.3;
+  color: var(--text);
+}
+.rich-editor-content h3 {
+  font-size: 17px;
+  font-weight: 600;
+  margin: 16px 0 6px;
+  line-height: 1.35;
+  color: var(--text);
+}
+.rich-editor-content p {
+  margin-bottom: 8px;
+}
+.rich-editor-content p:last-child {
+  margin-bottom: 0;
+}
+.rich-editor-content ul,
+.rich-editor-content ol {
+  padding-left: 24px;
+  margin: 8px 0;
+}
+.rich-editor-content li {
+  margin-bottom: 4px;
+}
+.rich-editor-content blockquote {
+  border-left: 3px solid var(--primary);
+  padding: 8px 16px;
+  margin: 12px 0;
+  background: var(--primary-bg);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+.rich-editor-content code {
+  background: var(--bg-hover);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 13px;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  color: var(--pink);
+}
+.rich-editor-content pre {
+  background: #1a1d23;
+  color: #e8ecf2;
+  padding: 16px 18px;
+  border-radius: var(--radius-sm);
+  overflow-x: auto;
+  margin: 12px 0;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.rich-editor-content pre code {
+  background: none;
+  color: inherit;
+  padding: 0;
+  font-size: inherit;
+}
+.rich-editor-content hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 16px 0;
+}
+.rich-editor-content strong { font-weight: 700; }
+.rich-editor-content em { font-style: italic; }
+.rich-editor-content s { text-decoration: line-through; }
+
+/* Display rendered HTML in post cards */
+.post-card-excerpt h2,
+.post-card-excerpt h3 {
+  margin: 8px 0 4px;
+}
+.post-card-excerpt h2 { font-size: 15px; }
+.post-card-excerpt h3 { font-size: 14px; }
+.post-card-excerpt p { margin-bottom: 4px; }
+.post-card-excerpt ul,
+.post-card-excerpt ol { padding-left: 20px; margin: 4px 0; }
+.post-card-excerpt blockquote {
+  border-left: 2px solid var(--primary);
+  padding: 4px 12px;
+  margin: 8px 0;
+  font-style: italic;
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+.post-card-excerpt code {
+  background: var(--bg-hover);
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-size: 12px;
+}
+.post-card-excerpt pre {
+  background: #1a1d23;
+  color: #e8ecf2;
+  padding: 12px;
+  border-radius: 6px;
+  overflow-x: auto;
+  margin: 8px 0;
+  font-size: 11px;
+}
+.post-card-excerpt pre code {
+  background: none;
+  color: inherit;
+  padding: 0;
+  font-size: inherit;
+}

@@ -80,7 +80,7 @@ export default function ProfilePage() {
                     <h4 className="post-card-title" style={{ margin: 0 }}>{post.title}</h4>
                     <span className={`badge badge-${post.status}`}>{post.status}</span>
                   </div>
-                  {post.content && <p className="post-card-excerpt">{post.content}</p>}
+                  {post.content && <div className="post-card-excerpt" dangerouslySetInnerHTML={{ __html: post.content }} />}
                   <div className="post-time" style={{ marginTop: 8 }}>{timeAgo(post.createdAt)}</div>
                   <div className="post-reactions" style={{ marginTop: 8 }}>
                     {Object.entries(post.reactions || {}).filter(([,v])=>v>0).map(([emoji,count]) => (

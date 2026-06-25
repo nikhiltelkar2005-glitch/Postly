@@ -130,7 +130,7 @@ export default function Dashboard({ onNavigate }) {
                 )}
                 <div className="post-card-body">
                   <h4 className="post-card-title">{post.title}</h4>
-                  {post.content && <p className="post-card-excerpt">{post.content}</p>}
+                  {post.content && <div className="post-card-excerpt" dangerouslySetInnerHTML={{ __html: post.content }} />}
                   <div className="post-reactions" style={{ pointerEvents: 'none' }}>
                     {Object.entries(post.reactions || {}).filter(([,v])=>v>0).map(([emoji, count]) => (
                       <span key={emoji} className="reaction-btn has-count" style={{ pointerEvents:'none' }}>
